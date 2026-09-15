@@ -228,6 +228,14 @@ Les tests ajoutent leurs propres objets dans ces repositories avant d’exécute
 
 # Exercice 2 : Analyse et architecture pour le projet Toubilib
 
+## 1. Diagramme de classes du domaine métier
+
+Le domaine de Toubilib est principalement composé des entités `Patient`, `Praticien`, `Specialite` et `RendezVous`. L’énumération `EtatRendezVous` limite l’état d’un rendez-vous aux valeurs `PLANIFIE`, `ANNULE`, `HONORE` et `NON_HONORE`.
+
+Les méthodes qui modifient l’état, comme `annuler()`, appartiennent à l’entité `RendezVous`, car elles doivent appliquer les règles du domaine avant d’autoriser une transition.
+
+![Diagramme de classes du domaine Toubilib](Diagramme_exercice_2_Toubilib.png)
+
 ## 2. Fonctionnalité n°6 : annuler un rendez-vous
 
 ### Comment implanter cette fonctionnalité dans le domaine ?
