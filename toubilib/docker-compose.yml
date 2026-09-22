@@ -9,6 +9,7 @@ services:
     build:
       context: build
       dockerfile: 8.5-cli.Dockerfile
+    env_file: ./toubilib.env
     ports:
       - '7080:80'
     volumes:
