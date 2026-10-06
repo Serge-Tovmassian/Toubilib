@@ -18,12 +18,24 @@ final class ServiceRendezVous implements ServiceRendezVousInterface
 
     public function annuler(string $id): RendezVousDTO
     {
+        $rendezVous = $this->trouver($id);
+        $rendezVous->annuler();
+        $this->repository->save($rendezVous);
+        return RendezVousDTO::fromEntity($rendezVous);
+    }
+
+    public function obtenirParId(string $id): RendezVousDTO
+    {
+        return RendezVousDTO::fromEntity($this->trouver($id));
+    }
+
+    private function trouver(string $id): \toubilib\domain\entities\RendezVous
+    {
         $rendezVous = $this->repository->findById($id);
         if ($rendezVous === null) {
             throw new RendezVousNotFoundException($id);
         }
-        $rendezVous->annuler();
-        $this->repository->save($rendezVous);
-        return RendezVousDTO::fromEntity($rendezVous);
+
+        return $rendezVous;
     }
 }

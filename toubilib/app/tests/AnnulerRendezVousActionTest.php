@@ -26,6 +26,11 @@ final class AnnulerRendezVousActionTest extends TestCase
             {
                 return ($this->annuler)($id);
             }
+
+            public function obtenirParId(string $id): RendezVousDTO
+            {
+                return ($this->annuler)($id);
+            }
         };
 
         $action = new AnnulerRendezVousAction($service);
@@ -64,4 +69,3 @@ final class AnnulerRendezVousActionTest extends TestCase
         self::assertSame(409, $response->getStatusCode());
     }
 }
-    
