@@ -9,6 +9,7 @@ use Slim\Psr7\Factory\ServerRequestFactory;
 use Slim\Psr7\Response;
 use toubilib\adapters\actions\AnnulerRendezVousAction;
 use toubilib\application\dto\RendezVousDTO;
+use toubilib\application\dto\CreateRdvDTO;
 use toubilib\application\exceptions\RendezVousNotFoundException;
 use toubilib\application\ports\api\ServiceRendezVousInterface;
 use toubilib\domain\exceptions\TransitionEtatRendezVousException;
@@ -30,6 +31,11 @@ final class AnnulerRendezVousActionTest extends TestCase
             public function obtenirParId(string $id): RendezVousDTO
             {
                 return ($this->annuler)($id);
+            }
+
+            public function creer(CreateRdvDTO $dto): CreateRdvDTO
+            {
+                return $dto;
             }
         };
 

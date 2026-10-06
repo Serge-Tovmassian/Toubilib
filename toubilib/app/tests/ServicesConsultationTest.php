@@ -8,15 +8,33 @@ use PHPUnit\Framework\TestCase;
 use toubilib\application\exceptions\PraticienNotFoundException;
 use toubilib\application\exceptions\RendezVousNotFoundException;
 use toubilib\application\ports\spi\PraticienRepositoryInterface;
+use toubilib\application\ports\spi\PatientRepositoryInterface;
 use toubilib\application\ports\spi\RendezVousRepositoryInterface;
 use toubilib\application\usecases\ServicePraticien;
 use toubilib\application\usecases\ServiceRendezVous;
+use toubilib\application\validators\CreateRendezVousValidator;
+use toubilib\domain\entities\Patient;
 use toubilib\domain\entities\Praticien;
 use toubilib\domain\entities\RendezVous;
 use toubilib\domain\entities\Specialite;
 
 final class ServicesConsultationTest extends TestCase
 {
+    private function validateurCreation(): CreateRendezVousValidator
+    {
+        $praticien = $this->praticien();
+        $praticiens = new class($praticien) implements PraticienRepositoryInterface {
+            public function __construct(private readonly Praticien $praticien) {}
+            public function findAll(): array { return [$this->praticien]; }
+            public function findById(string $id): ?Praticien { return $this->praticien; }
+        };
+        $patients = new class implements PatientRepositoryInterface {
+            public function findById(string $id): ?Patient { return new Patient($id, 'Martin', 'Bob'); }
+        };
+
+        return new CreateRendezVousValidator($praticiens, $patients);
+    }
+
     private function praticien(): Praticien
     {
         return new Praticien(
@@ -86,7 +104,7 @@ final class ServicesConsultationTest extends TestCase
             public function save(RendezVous $rendezVous): void {}
         };
 
-        $resultat = (new ServiceRendezVous($repository))->obtenirParId('rdv-1');
+        $resultat = (new ServiceRendezVous($repository, $this->validateurCreation()))->obtenirParId('rdv-1');
 
         self::assertSame('rdv-1', $resultat->id);
     }
@@ -99,6 +117,6 @@ final class ServicesConsultationTest extends TestCase
         };
 
         $this->expectException(RendezVousNotFoundException::class);
-        (new ServiceRendezVous($repository))->obtenirParId('absent');
+        (new ServiceRendezVous($repository, $this->validateurCreation()))->obtenirParId('absent');
     }
 }

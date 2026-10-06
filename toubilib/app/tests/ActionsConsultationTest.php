@@ -12,6 +12,7 @@ use toubilib\adapters\actions\ObtenirPraticienAction;
 use toubilib\adapters\actions\ObtenirRendezVousAction;
 use toubilib\application\dto\PraticienDTO;
 use toubilib\application\dto\PraticienResumeDTO;
+use toubilib\application\dto\CreateRdvDTO;
 use toubilib\application\dto\RendezVousDTO;
 use toubilib\application\exceptions\PraticienNotFoundException;
 use toubilib\application\exceptions\RendezVousNotFoundException;
@@ -53,6 +54,7 @@ final class ActionsConsultationTest extends TestCase
     public function testRetourneLeRendezVousEnJson(): void
     {
         $service = new class implements ServiceRendezVousInterface {
+            public function creer(CreateRdvDTO $dto): CreateRdvDTO { return $dto; }
             public function obtenirParId(string $id): RendezVousDTO
             {
                 return new RendezVousDTO($id, 'p1', 'patient-1', '2030-01-01T10:00:00+01:00', null, 30, 'PLANIFIE', null);
@@ -70,6 +72,7 @@ final class ActionsConsultationTest extends TestCase
     public function testRetourne404PourUnRendezVousAbsent(): void
     {
         $service = new class implements ServiceRendezVousInterface {
+            public function creer(CreateRdvDTO $dto): CreateRdvDTO { return $dto; }
             public function obtenirParId(string $id): RendezVousDTO { throw new RendezVousNotFoundException($id); }
             public function annuler(string $id): RendezVousDTO { throw new LogicException(); }
         };

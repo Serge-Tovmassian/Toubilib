@@ -3,14 +3,17 @@
 declare(strict_types=1);
 
 use Psr\Container\ContainerInterface;
+use toubilib\adapters\repositories\PatientRepository;
 use toubilib\adapters\repositories\PraticienRepository;
 use toubilib\adapters\repositories\RendezVousRepository;
 use toubilib\application\ports\api\ServicePraticienInterface;
 use toubilib\application\ports\api\ServiceRendezVousInterface;
 use toubilib\application\ports\spi\PraticienRepositoryInterface;
+use toubilib\application\ports\spi\PatientRepositoryInterface;
 use toubilib\application\ports\spi\RendezVousRepositoryInterface;
 use toubilib\application\usecases\ServicePraticien;
 use toubilib\application\usecases\ServiceRendezVous;
+use toubilib\application\validators\CreateRendezVousValidator;
 
 use function DI\create;
 use function DI\get;
@@ -39,10 +42,20 @@ return [
     },
     PraticienRepositoryInterface::class => create(PraticienRepository::class)
         ->constructor(get(PDO::class)),
+    PatientRepositoryInterface::class => create(PatientRepository::class)
+        ->constructor(get(PDO::class)),
     RendezVousRepositoryInterface::class => create(RendezVousRepository::class)
         ->constructor(get(PDO::class)),
+    CreateRendezVousValidator::class => create(CreateRendezVousValidator::class)
+        ->constructor(
+            get(PraticienRepositoryInterface::class),
+            get(PatientRepositoryInterface::class),
+        ),
     ServicePraticienInterface::class => create(ServicePraticien::class)
         ->constructor(get(PraticienRepositoryInterface::class)),
     ServiceRendezVousInterface::class => create(ServiceRendezVous::class)
-        ->constructor(get(RendezVousRepositoryInterface::class)),
+        ->constructor(
+            get(RendezVousRepositoryInterface::class),
+            get(CreateRendezVousValidator::class),
+        ),
 ];
