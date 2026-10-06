@@ -4,37 +4,15 @@ declare(strict_types=1);
 
 use DI\ContainerBuilder;
 use Slim\Factory\AppFactory;
-use toubilib\adapters\repositories\RendezVousRepository;
-use toubilib\application\ports\api\ServiceRendezVousInterface;
-use toubilib\application\ports\spi\RendezVousRepositoryInterface;
-use toubilib\application\usecases\ServiceRendezVous;
 
 $containerBuilder = new ContainerBuilder();
-$containerBuilder->addDefinitions([
-    PDO::class => static function (): PDO {
-        $database = getenv('POSTGRES_DB');
-        $username = getenv('POSTGRES_USER');
-        $password = getenv('POSTGRES_PASSWORD');
-        $host = getenv('POSTGRES_HOST') ?: 'toubilib.db';
-
-        if ($database === false || $username === false || $password === false) {
-            throw new RuntimeException('Configuration PostgreSQL manquante.');
-        }
-
-        return new PDO(
-            "pgsql:host={$host};port=5432;dbname={$database}",
-            $username,
-            $password,
-            [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION],
-        );
-    },
-    RendezVousRepositoryInterface::class => DI\autowire(RendezVousRepository::class),
-    ServiceRendezVousInterface::class => DI\autowire(ServiceRendezVous::class),
-]);
+$containerBuilder->useAutowiring(false);
+$containerBuilder->addDefinitions(__DIR__ . '/settings.php');
+$containerBuilder->addDefinitions(__DIR__ . '/services.php');
+$containerBuilder->addDefinitions(__DIR__ . '/api.php');
 
 $container = $containerBuilder->build();
-AppFactory::setContainer($container);
-$app = AppFactory::create();
+$app = AppFactory::createFromContainer($container);
 
 require __DIR__ . '/routes.php';
 
