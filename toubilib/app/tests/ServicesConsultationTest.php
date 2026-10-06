@@ -27,6 +27,10 @@ final class ServicesConsultationTest extends TestCase
             public function __construct(private readonly Praticien $praticien) {}
             public function findAll(): array { return [$this->praticien]; }
             public function findById(string $id): ?Praticien { return $this->praticien; }
+            public function findByIdWithRendezVousForDate(string $id, DateTimeImmutable $date): ?Praticien
+            {
+                return $this->praticien;
+            }
         };
         $patients = new class implements PatientRepositoryInterface {
             public function findById(string $id): ?Patient { return new Patient($id, 'Martin', 'Bob'); }
@@ -55,6 +59,10 @@ final class ServicesConsultationTest extends TestCase
             public function __construct(private readonly Praticien $praticien) {}
             public function findAll(): array { return [$this->praticien]; }
             public function findById(string $id): ?Praticien { return $this->praticien; }
+            public function findByIdWithRendezVousForDate(string $id, DateTimeImmutable $date): ?Praticien
+            {
+                return $this->praticien;
+            }
         };
 
         $resultat = (new ServicePraticien($repository))->lister();
@@ -71,6 +79,10 @@ final class ServicesConsultationTest extends TestCase
             public function __construct(private readonly Praticien $praticien) {}
             public function findAll(): array { return []; }
             public function findById(string $id): ?Praticien { return $this->praticien; }
+            public function findByIdWithRendezVousForDate(string $id, DateTimeImmutable $date): ?Praticien
+            {
+                return $this->praticien;
+            }
         };
 
         $resultat = (new ServicePraticien($repository))->obtenirParId('praticien-1');
@@ -83,6 +95,10 @@ final class ServicesConsultationTest extends TestCase
         $repository = new class implements PraticienRepositoryInterface {
             public function findAll(): array { return []; }
             public function findById(string $id): ?Praticien { return null; }
+            public function findByIdWithRendezVousForDate(string $id, DateTimeImmutable $date): ?Praticien
+            {
+                return null;
+            }
         };
 
         $this->expectException(PraticienNotFoundException::class);

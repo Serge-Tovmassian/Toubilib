@@ -6,6 +6,7 @@ namespace toubilib\domain\entities;
 
 use DateTimeImmutable;
 use DateTimeInterface;
+use Ramsey\Uuid\Uuid;
 use toubilib\domain\exceptions\TransitionEtatRendezVousException;
 
 final class RendezVous
@@ -21,6 +22,42 @@ final class RendezVous
         private readonly ?string $motifVisite = null,
         private EtatRendezVous $etat = EtatRendezVous::PLANIFIE,
     ) {
+    }
+
+    public static function creer(
+        Praticien $praticien,
+        Patient $patient,
+        DateTimeImmutable $dateHeureDebut,
+        string $motifVisite,
+    ): self {
+        $duree = $praticien->calculerDuree($motifVisite);
+        $praticien->verifierDateRendezVous($dateHeureDebut, $duree);
+
+        $rendezVous = new self(
+            id: Uuid::uuid4()->toString(),
+            praticienId: $praticien->getId(),
+            patientId: $patient->getId(),
+            dateHeureDebut: $dateHeureDebut,
+            duree: $duree,
+            dateHeureFin: $dateHeureDebut->modify("+{$duree} minutes"),
+            dateCreation: new DateTimeImmutable(),
+            motifVisite: $motifVisite,
+        );
+
+        $praticien->verifierDisponibilite($rendezVous);
+
+        return $rendezVous;
+    }
+
+    public function chevauche(self $autre): bool
+    {
+        return $this->dateHeureDebut < $autre->dateHeureFinCalculee()
+            && $this->dateHeureFinCalculee() > $autre->dateHeureDebut;
+    }
+
+    private function dateHeureFinCalculee(): DateTimeImmutable
+    {
+        return $this->dateHeureFin ?? $this->dateHeureDebut->modify("+{$this->duree} minutes");
     }
 
     public function annuler(?DateTimeInterface $maintenant = null): void

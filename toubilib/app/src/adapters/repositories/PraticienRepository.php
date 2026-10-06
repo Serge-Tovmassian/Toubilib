@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace toubilib\adapters\repositories;
 
+use DateTimeImmutable;
 use PDO;
 use toubilib\application\ports\spi\PraticienRepositoryInterface;
 use toubilib\domain\entities\Praticien;
+use toubilib\domain\entities\EtatRendezVous;
+use toubilib\domain\entities\RendezVous;
 use toubilib\domain\entities\Specialite;
 
 final class PraticienRepository implements PraticienRepositoryInterface
@@ -37,6 +40,35 @@ final class PraticienRepository implements PraticienRepositoryInterface
         return $row === false ? null : $this->hydrate($row);
     }
 
+    public function findByIdWithRendezVousForDate(string $id, DateTimeImmutable $date): ?Praticien
+    {
+        $praticien = $this->findById($id);
+        if ($praticien === null) {
+            return null;
+        }
+
+        $debutJournee = $date->setTime(0, 0);
+        $finJournee = $debutJournee->modify('+1 day');
+        $statement = $this->pdo->prepare(
+            'SELECT id, praticien_id, patient_id, date_heure_debut, duree, '
+            . 'date_heure_fin, date_creation, motif_visite, status FROM rdv '
+            . 'WHERE praticien_id = :praticien_id '
+            . 'AND date_heure_debut >= :debut AND date_heure_debut < :fin',
+        );
+        $statement->execute([
+            'praticien_id' => $id,
+            'debut' => $debutJournee->format('Y-m-d H:i:s'),
+            'fin' => $finJournee->format('Y-m-d H:i:s'),
+        ]);
+
+        $praticien->chargerRendezVous(array_map(
+            $this->hydrateRendezVous(...),
+            $statement->fetchAll(PDO::FETCH_ASSOC),
+        ));
+
+        return $praticien;
+    }
+
     /** @param array<string, mixed> $row */
     private function hydrate(array $row): Praticien
     {
@@ -57,6 +89,22 @@ final class PraticienRepository implements PraticienRepositoryInterface
             organisation: $this->toBool($row['organisation']),
             accepteNouveauPatient: $this->toBool($row['nouveau_patient']),
             titre: (string) $row['titre'],
+        );
+    }
+
+    /** @param array<string, mixed> $row */
+    private function hydrateRendezVous(array $row): RendezVous
+    {
+        return new RendezVous(
+            id: (string) $row['id'],
+            praticienId: (string) $row['praticien_id'],
+            patientId: (string) $row['patient_id'],
+            dateHeureDebut: new DateTimeImmutable($row['date_heure_debut']),
+            duree: (int) $row['duree'],
+            dateHeureFin: $row['date_heure_fin'] === null ? null : new DateTimeImmutable($row['date_heure_fin']),
+            dateCreation: $row['date_creation'] === null ? null : new DateTimeImmutable($row['date_creation']),
+            motifVisite: $row['motif_visite'] === null ? null : (string) $row['motif_visite'],
+            etat: EtatRendezVous::from((int) $row['status']),
         );
     }
 

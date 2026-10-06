@@ -4,21 +4,35 @@ declare(strict_types=1);
 
 namespace toubilib\domain\entities;
 
-final readonly class Praticien
+use DateTimeImmutable;
+use toubilib\domain\exceptions\CreneauRendezVousIndisponibleException;
+use toubilib\domain\exceptions\DateRendezVousInvalideException;
+use toubilib\domain\exceptions\MotifRendezVousInvalideException;
+
+final class Praticien
 {
+    /** @var list<RendezVous> */
+    private array $rendezVous = [];
+
     public function __construct(
-        private string $id,
-        private string $nom,
-        private string $prenom,
-        private string $ville,
-        private string $email,
-        private string $telephone,
-        private Specialite $specialite,
-        private ?string $structureId = null,
-        private ?string $rppsId = null,
-        private bool $organisation = false,
-        private bool $accepteNouveauPatient = true,
-        private string $titre = 'Dr.',
+        private readonly string $id,
+        private readonly string $nom,
+        private readonly string $prenom,
+        private readonly string $ville,
+        private readonly string $email,
+        private readonly string $telephone,
+        private readonly Specialite $specialite,
+        private readonly ?string $structureId = null,
+        private readonly ?string $rppsId = null,
+        private readonly bool $organisation = false,
+        private readonly bool $accepteNouveauPatient = true,
+        private readonly string $titre = 'Dr.',
+        /** @var array<string, int> */
+        private readonly array $dureesParMotif = ['Consultation' => 30],
+        /** @var list<int> */
+        private readonly array $joursOuvrables = [1, 2, 3, 4, 5],
+        private readonly string $heureOuverture = '08:00',
+        private readonly string $heureFermeture = '18:00',
     ) {
     }
 
@@ -34,4 +48,69 @@ final readonly class Praticien
     public function estUneOrganisation(): bool { return $this->organisation; }
     public function accepteNouveauPatient(): bool { return $this->accepteNouveauPatient; }
     public function getTitre(): string { return $this->titre; }
+
+    public function verifierMotif(string $motif): void
+    {
+        if (!array_key_exists($motif, $this->dureesParMotif)) {
+            throw new MotifRendezVousInvalideException("Motif de rendez-vous invalide : {$motif}");
+        }
+    }
+
+    public function calculerDuree(string $motif): int
+    {
+        $this->verifierMotif($motif);
+
+        return $this->dureesParMotif[$motif];
+    }
+
+    public function verifierDateRendezVous(
+        DateTimeImmutable $dateHeureDebut,
+        int $duree,
+        ?DateTimeImmutable $maintenant = null,
+    ): void {
+        $maintenant ??= new DateTimeImmutable();
+        $dateHeureFin = $dateHeureDebut->modify("+{$duree} minutes");
+
+        if ($dateHeureDebut <= $maintenant) {
+            throw new DateRendezVousInvalideException('La date du rendez-vous doit etre future.');
+        }
+
+        if (!in_array((int) $dateHeureDebut->format('N'), $this->joursOuvrables, true)) {
+            throw new DateRendezVousInvalideException('Le rendez-vous doit etre fixe un jour ouvrable.');
+        }
+
+        if (
+            $dateHeureDebut->format('H:i') < $this->heureOuverture
+            || $dateHeureFin->format('Y-m-d') !== $dateHeureDebut->format('Y-m-d')
+            || $dateHeureFin->format('H:i') > $this->heureFermeture
+        ) {
+            throw new DateRendezVousInvalideException('Le rendez-vous est en dehors des horaires acceptes.');
+        }
+    }
+
+    /** @param list<RendezVous> $rendezVous */
+    public function chargerRendezVous(array $rendezVous): void
+    {
+        foreach ($rendezVous as $rendezVousExistant) {
+            if ($rendezVousExistant->getPraticienId() !== $this->id) {
+                throw new \InvalidArgumentException('Le rendez-vous appartient a un autre praticien.');
+            }
+        }
+
+        $this->rendezVous = array_values($rendezVous);
+    }
+
+    public function verifierDisponibilite(RendezVous $demande): void
+    {
+        foreach ($this->rendezVous as $rendezVousExistant) {
+            if (
+                $rendezVousExistant->getEtat() !== EtatRendezVous::ANNULE
+                && $demande->chevauche($rendezVousExistant)
+            ) {
+                throw new CreneauRendezVousIndisponibleException(
+                    'Le praticien est indisponible sur le creneau demande.',
+                );
+            }
+        }
+    }
 }

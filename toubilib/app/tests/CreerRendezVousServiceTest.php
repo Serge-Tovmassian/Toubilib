@@ -49,6 +49,10 @@ final class CreerRendezVousServiceTest extends TestCase
             public function __construct(private readonly ?Praticien $praticien) {}
             public function findAll(): array { return $this->praticien === null ? [] : [$this->praticien]; }
             public function findById(string $id): ?Praticien { return $this->praticien; }
+            public function findByIdWithRendezVousForDate(string $id, DateTimeImmutable $date): ?Praticien
+            {
+                return $this->praticien;
+            }
         };
         $patients = new class($patient) implements PatientRepositoryInterface {
             public function __construct(private readonly ?Patient $patient) {}
