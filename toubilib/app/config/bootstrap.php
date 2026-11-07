@@ -24,12 +24,17 @@ $app->add(function ($request, $handler) {
     $response = $request->getMethod() === 'OPTIONS'
         ? new \Slim\Psr7\Response(204)
         : $handler->handle($request);
+    $autorises = array_filter(array_map('trim', explode(',', getenv('CORS_ORIGINS') ?: '')));
+    $origine = $request->getHeaderLine('Origin');
+    $response = $response->withHeader('Vary', 'Origin');
+    if (!in_array($origine, $autorises, true)) {
+        return $response;
+    }
+
     return $response
-        ->withHeader('Access-Control-Allow-Origin', $request->getHeaderLine('Origin') ?: '*')
-        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
-        ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization')
-        ->withHeader('Access-Control-Allow-Credentials', 'true')
-        ->withHeader('Vary', 'Origin');
+        ->withHeader('Access-Control-Allow-Origin', $origine)
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS')
+        ->withHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 });
 
 return $app;
