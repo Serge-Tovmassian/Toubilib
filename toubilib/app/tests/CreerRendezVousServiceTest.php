@@ -39,7 +39,7 @@ final class CreerRendezVousServiceTest extends TestCase
             $praticienId,
             $patientId,
             new DateTimeImmutable('2030-12-20 10:00:00'),
-            'Consultation',
+            'CI',
         );
     }
 

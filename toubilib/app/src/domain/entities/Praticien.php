@@ -28,7 +28,7 @@ final class Praticien
         private readonly bool $accepteNouveauPatient = true,
         private readonly string $titre = 'Dr.',
         /** @var array<string, int> */
-        private readonly array $dureesParMotif = ['Consultation' => 30],
+        private readonly array $dureesParMotif = ['CI' => 30, 'C0' => 20, 'CS' => 15],
         /** @var list<int> */
         private readonly array $joursOuvrables = [1, 2, 3, 4, 5],
         private readonly string $heureOuverture = '08:00',
