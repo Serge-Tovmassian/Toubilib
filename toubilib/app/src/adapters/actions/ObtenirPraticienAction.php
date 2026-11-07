@@ -26,7 +26,15 @@ final class ObtenirPraticienAction
         }
 
         try {
-            return $this->json($this->service->obtenirParId($args['id']), 200);
+            $praticien = $this->service->obtenirParId($args['id']);
+            return $this->json([
+                'type' => 'ressource',
+                'praticien' => $praticien,
+                'links' => [
+                    'self' => ['href' => '/praticiens/' . $praticien->id],
+                    'praticiens' => ['href' => '/praticiens'],
+                ],
+            ], 200);
         } catch (PraticienNotFoundException $e) {
             return $this->json(['erreur' => $e->getMessage()], 404);
         } catch (PDOException) {

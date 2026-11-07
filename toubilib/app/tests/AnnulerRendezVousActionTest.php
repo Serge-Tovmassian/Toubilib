@@ -40,7 +40,7 @@ final class AnnulerRendezVousActionTest extends TestCase
         };
 
         $action = new AnnulerRendezVousAction($service);
-        $request = (new ServerRequestFactory())->createServerRequest('PATCH', '/rendez-vous/rdv-1/annulation');
+        $request = (new ServerRequestFactory())->createServerRequest('PATCH', '/rdvs/rdv-1/annuler');
 
         return $action($request, new Response(), ['id' => 'rdv-1']);
     }
@@ -54,7 +54,7 @@ final class AnnulerRendezVousActionTest extends TestCase
 
         self::assertSame(200, $response->getStatusCode());
         self::assertStringStartsWith('application/json', $response->getHeaderLine('Content-Type'));
-        self::assertSame('ANNULE', json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR)['etat']);
+        self::assertSame('ANNULE', json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR)['rendez_vous']['etat']);
     }
 
     public function testRetourne404SiLeRendezVousEstAbsent(): void

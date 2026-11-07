@@ -32,7 +32,15 @@ final class AnnulerRendezVousAction
 
         try {
             $rendezVous = $this->service->annuler($id);
-            return $this->json($rendezVous, 200);
+            return $this->json([
+                'type' => 'ressource',
+                'rendez_vous' => $rendezVous,
+                'links' => [
+                    'self' => ['href' => '/rdvs/' . $rendezVous->id],
+                    'praticien' => ['href' => '/praticiens/' . $rendezVous->praticienId],
+                    'patient' => ['href' => '/patients/' . $rendezVous->patientId],
+                ],
+            ], 200);
         } catch (RendezVousNotFoundException $e) {
             return $this->json(['erreur' => $e->getMessage()], 404);
         } catch (TransitionEtatRendezVousException $e) {
