@@ -7,7 +7,7 @@ use toubilib\adapters\actions\ListerPraticiensAction;
 use toubilib\adapters\actions\ObtenirPraticienAction;
 use toubilib\adapters\actions\ObtenirRendezVousAction;
 
-$app->get('/praticiens', ListerPraticiensAction::class);
+$app->get('/praticiens',ListerPraticiensAction::class);
 $app->get('/praticiens/{id}', ObtenirPraticienAction::class);
 $app->get('/praticiens/{id}/agenda', 'agenda.praticien');
 $app->get('/praticiens/{id}/creneaux', 'creneaux.praticien');
