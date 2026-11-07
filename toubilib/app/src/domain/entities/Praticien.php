@@ -118,6 +118,28 @@ final class Praticien
         return $libres;
     }
 
+    /** Bloque une demi-journée ("matin" jusqu'à 12h, "apres-midi" à partir de 12h). */
+    public function creerIndisponibilite(
+        DateTimeImmutable $jour,
+        string $periode,
+        ?DateTimeImmutable $maintenant = null,
+    ): RendezVous {
+        [$de, $a] = match ($periode) {
+            'matin' => [$this->heureOuverture, '12:00'],
+            'apres-midi' => ['12:00', $this->heureFermeture],
+            default => throw new DateRendezVousInvalideException('Periode invalide : matin ou apres-midi.'),
+        };
+        $date = $jour->format('Y-m-d');
+        $debut = new DateTimeImmutable("{$date} {$de}");
+        $duree = intdiv((new DateTimeImmutable("{$date} {$a}"))->getTimestamp() - $debut->getTimestamp(), 60);
+
+        $this->verifierDateRendezVous($debut, $duree, $maintenant);
+        $indisponibilite = RendezVous::indisponibilite($this->id, $debut, $duree);
+        $this->verifierDisponibilite($indisponibilite);
+
+        return $indisponibilite;
+    }
+
     /** @param list<RendezVous> $rendezVous */
     public function chargerRendezVous(array $rendezVous): void
     {

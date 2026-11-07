@@ -40,7 +40,7 @@ final class ChangerEtatRendezVousAction
             'links' => [
                 'self' => ['href' => '/rdvs/' . $rdv->id],
                 'praticien' => ['href' => '/praticiens/' . $rdv->praticienId],
-                'patient' => ['href' => '/patients/' . $rdv->patientId],
+                ...($rdv->patientId === null ? [] : ['patient' => ['href' => '/patients/' . $rdv->patientId]]),
             ],
         ], 200);
     }

@@ -38,7 +38,7 @@ final class AnnulerRendezVousAction
                 'links' => [
                     'self' => ['href' => '/rdvs/' . $rendezVous->id],
                     'praticien' => ['href' => '/praticiens/' . $rendezVous->praticienId],
-                    'patient' => ['href' => '/patients/' . $rendezVous->patientId],
+                    ...($rendezVous->patientId === null ? [] : ['patient' => ['href' => '/patients/' . $rendezVous->patientId]]),
                 ],
             ], 200);
         } catch (RendezVousNotFoundException $e) {

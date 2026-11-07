@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use toubilib\domain\entities\Praticien;
 use toubilib\domain\entities\RendezVous;
 use toubilib\domain\entities\Specialite;
+use toubilib\domain\exceptions\DateRendezVousInvalideException;
 
 final class DisponibilitesPraticienTest extends TestCase
 {
@@ -33,6 +34,28 @@ final class DisponibilitesPraticienTest extends TestCase
         self::assertNotContains('10:00', $libres);
         self::assertContains('10:30', $libres);
         self::assertSame('17:30', end($libres)); // 17:30 + 30 min = 18:00 (fermeture)
+    }
+
+    public function testIndisponibiliteBloqueLaDemiJournee(): void
+    {
+        $praticien = $this->praticien();
+        $maintenant = new DateTimeImmutable('2030-01-01');
+        $jour = new DateTimeImmutable('2030-12-20');
+        $indispo = $praticien->creerIndisponibilite($jour, 'matin', $maintenant);
+
+        self::assertNull($indispo->getPatientId());
+        self::assertSame('indisponible', $indispo->getMotifVisite());
+        self::assertSame(240, $indispo->getDuree());
+
+        $praticien->chargerRendezVous([$indispo]);
+        $libres = $praticien->creneauxDisponibles($jour, 'CI', $maintenant);
+        self::assertSame('12:00', $libres[0]->format('H:i'));
+    }
+
+    public function testIndisponibiliteRefuseUnePeriodeInconnue(): void
+    {
+        $this->expectException(DateRendezVousInvalideException::class);
+        $this->praticien()->creerIndisponibilite(new DateTimeImmutable('2030-12-20'), 'soir', new DateTimeImmutable('2030-01-01'));
     }
 
     public function testAucunCreneauUnJourFerme(): void

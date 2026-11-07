@@ -20,6 +20,8 @@ interface ServiceRendezVousInterface
 
     public function ignorer(string $id): RendezVousDTO;
 
+    public function declarerIndisponibilite(string $praticienId, DateTimeImmutable $jour, string $periode): RendezVousDTO;
+
     /** @return list<RendezVousDTO> */
     public function historique(string $patientId): array;
 

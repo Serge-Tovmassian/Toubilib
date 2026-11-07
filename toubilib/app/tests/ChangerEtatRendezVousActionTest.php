@@ -34,6 +34,7 @@ final class ChangerEtatRendezVousActionTest extends TestCase
             public function annuler(string $id): RendezVousDTO { throw new LogicException(); }
             public function honorer(string $id): RendezVousDTO { return $this->dto('HONORE'); }
             public function ignorer(string $id): RendezVousDTO { return $this->dto('NON_HONORE'); }
+            public function declarerIndisponibilite(string $praticienId, DateTimeImmutable $jour, string $periode): RendezVousDTO { throw new LogicException(); }
         };
     }
 

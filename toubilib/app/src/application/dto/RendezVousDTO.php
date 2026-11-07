@@ -12,7 +12,7 @@ final readonly class RendezVousDTO implements JsonSerializable
     public function __construct(
         public string $id,
         public string $praticienId,
-        public string $patientId,
+        public ?string $patientId,
         public string $dateHeureDebut,
         public ?string $dateHeureFin,
         public int $duree,

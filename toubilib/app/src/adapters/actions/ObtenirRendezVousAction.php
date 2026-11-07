@@ -34,7 +34,7 @@ final class ObtenirRendezVousAction
                 'links' => [
                     'self' => ['href' => $base],
                     'praticien' => ['href' => '/praticiens/' . $rdv->praticienId],
-                    'patient' => ['href' => '/patients/' . $rdv->patientId],
+                    ...($rdv->patientId === null ? [] : ['patient' => ['href' => '/patients/' . $rdv->patientId]]),
                     'annuler' => ['href' => $base . '/annuler'],
                     'honorer' => ['href' => $base . '/honorer'],
                     'ignorer' => ['href' => $base . '/ignorer'],

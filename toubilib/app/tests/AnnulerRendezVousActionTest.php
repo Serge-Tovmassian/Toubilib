@@ -25,6 +25,7 @@ final class AnnulerRendezVousActionTest extends TestCase
 
             public function honorer(string $id): RendezVousDTO { throw new LogicException(); }
             public function ignorer(string $id): RendezVousDTO { throw new LogicException(); }
+            public function declarerIndisponibilite(string $praticienId, DateTimeImmutable $jour, string $periode): RendezVousDTO { throw new LogicException(); }
             public function historique(string $patientId): array { return []; }
             public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array { return []; }
 

@@ -52,6 +52,14 @@ final class ServiceRendezVous implements ServiceRendezVousInterface
         return RendezVousDTO::fromEntity($rendezVous);
     }
 
+    public function declarerIndisponibilite(string $praticienId, DateTimeImmutable $jour, string $periode): RendezVousDTO
+    {
+        $indisponibilite = $this->createValidator->validerIndisponibilite($praticienId, $jour, $periode);
+        $this->repository->insert($indisponibilite);
+
+        return RendezVousDTO::fromEntity($indisponibilite);
+    }
+
     public function obtenirParId(string $id): RendezVousDTO
     {
         return RendezVousDTO::fromEntity($this->trouver($id));

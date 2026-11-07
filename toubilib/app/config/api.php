@@ -5,6 +5,7 @@ declare(strict_types=1);
 use toubilib\adapters\actions\AnnulerRendezVousAction;
 use toubilib\adapters\actions\ChangerEtatRendezVousAction;
 use toubilib\adapters\actions\CreerRendezVousAction;
+use toubilib\adapters\actions\DeclarerIndisponibiliteAction;
 use toubilib\adapters\actions\DisponibilitesPraticienAction;
 use toubilib\adapters\actions\HistoriquePatientAction;
 use toubilib\adapters\actions\ListerPraticiensAction;
@@ -32,6 +33,8 @@ return [
         ->constructor(get(ServiceRendezVousInterface::class), false),
     DisponibilitesPraticienAction::class => create(DisponibilitesPraticienAction::class)
         ->constructor(get(ServicePraticienInterface::class)),
+    DeclarerIndisponibiliteAction::class => create(DeclarerIndisponibiliteAction::class)
+        ->constructor(get(ServiceRendezVousInterface::class)),
     HistoriquePatientAction::class => create(HistoriquePatientAction::class)
         ->constructor(get(ServiceRendezVousInterface::class)),
     CreerRendezVousAction::class => create(CreerRendezVousAction::class)

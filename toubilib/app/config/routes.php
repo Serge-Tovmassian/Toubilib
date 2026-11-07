@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use toubilib\adapters\actions\AnnulerRendezVousAction;
 use toubilib\adapters\actions\CreerRendezVousAction;
+use toubilib\adapters\actions\DeclarerIndisponibiliteAction;
 use toubilib\adapters\actions\DisponibilitesPraticienAction;
 use toubilib\adapters\actions\HistoriquePatientAction;
 use toubilib\adapters\actions\ListerPraticiensAction;
@@ -13,6 +14,7 @@ use toubilib\adapters\actions\ObtenirRendezVousAction;
 $app->get('/praticiens',ListerPraticiensAction::class);
 $app->get('/praticiens/{id}', ObtenirPraticienAction::class);
 $app->get('/praticiens/{id}/disponibilites', DisponibilitesPraticienAction::class);
+$app->post('/praticiens/{id}/indisponibilites', DeclarerIndisponibiliteAction::class);
 $app->get('/praticiens/{id}/agenda', 'agenda.praticien');
 $app->get('/praticiens/{id}/creneaux', 'creneaux.praticien');
 $app->get('/patients/{id}/rdvs', HistoriquePatientAction::class);

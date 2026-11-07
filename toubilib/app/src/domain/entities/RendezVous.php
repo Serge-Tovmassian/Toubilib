@@ -14,7 +14,7 @@ final class RendezVous
     public function __construct(
         private readonly string $id,
         private readonly string $praticienId,
-        private readonly string $patientId,
+        private readonly ?string $patientId,
         private readonly DateTimeImmutable $dateHeureDebut,
         private readonly int $duree,
         private readonly ?DateTimeImmutable $dateHeureFin = null,
@@ -47,6 +47,20 @@ final class RendezVous
         $praticien->verifierDisponibilite($rendezVous);
 
         return $rendezVous;
+    }
+
+    public static function indisponibilite(string $praticienId, DateTimeImmutable $debut, int $duree): self
+    {
+        return new self(
+            id: Uuid::uuid4()->toString(),
+            praticienId: $praticienId,
+            patientId: null,
+            dateHeureDebut: $debut,
+            duree: $duree,
+            dateHeureFin: $debut->modify("+{$duree} minutes"),
+            dateCreation: new DateTimeImmutable(),
+            motifVisite: 'indisponible',
+        );
     }
 
     public function chevauche(self $autre): bool
@@ -110,7 +124,7 @@ final class RendezVous
         return $this->praticienId;
     }
 
-    public function getPatientId(): string
+    public function getPatientId(): ?string
     {
         return $this->patientId;
     }

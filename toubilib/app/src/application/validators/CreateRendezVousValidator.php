@@ -19,6 +19,14 @@ final readonly class CreateRendezVousValidator
     ) {
     }
 
+    public function validerIndisponibilite(string $praticienId, \DateTimeImmutable $jour, string $periode): RendezVous
+    {
+        $praticien = $this->praticienRepository->findByIdWithRendezVousForDate($praticienId, $jour)
+            ?? throw new PraticienNotFoundException($praticienId);
+
+        return $praticien->creerIndisponibilite($jour, $periode);
+    }
+
     public function validate(CreateRdvDTO $dto): RendezVous
     {
         $praticien = $this->praticienRepository->findByIdWithRendezVousForDate(

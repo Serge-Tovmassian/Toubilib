@@ -69,7 +69,7 @@ final class CreerRendezVousAction
             'links' => [
                 'self' => ['href' => $href],
                 'praticien' => ['href' => '/praticiens/' . $rdv->praticienId],
-                'patient' => ['href' => '/patients/' . $rdv->patientId],
+                ...($rdv->patientId === null ? [] : ['patient' => ['href' => '/patients/' . $rdv->patientId]]),
                 'annuler' => ['href' => $href . '/annuler'],
             ],
         ], 201)->withHeader('Location', $href);
