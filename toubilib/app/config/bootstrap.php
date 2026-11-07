@@ -21,7 +21,6 @@ $app->addErrorMiddleware(false, true, true);
 
 // CORS : ajouté en dernier = exécuté en premier, donc les erreurs portent aussi les en-têtes.
 $app->add(function ($request, $handler) {
-    // Préflight : réponse directe, sans passer par le routage
     $response = $request->getMethod() === 'OPTIONS'
         ? new \Slim\Psr7\Response(204)
         : $handler->handle($request);

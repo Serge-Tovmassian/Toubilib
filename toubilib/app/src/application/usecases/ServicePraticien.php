@@ -18,7 +18,7 @@ final class ServicePraticien implements ServicePraticienInterface
 
     public function lister(?string $specialite = null, ?string $ville = null): array
     {
-        // ponytail: filtre en mémoire (liste courte) ; passer en SQL si la table grossit
+        // Filtre en mémoire : suffisant tant que la liste reste courte
         $egal = static fn (string $a, ?string $b): bool => $b === null || mb_strtolower($a) === mb_strtolower($b);
         $praticiens = array_filter(
             $this->repository->findAll(),

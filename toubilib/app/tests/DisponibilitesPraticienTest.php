@@ -20,7 +20,6 @@ final class DisponibilitesPraticienTest extends TestCase
     {
         $jour = new DateTimeImmutable('2030-12-20'); // vendredi
         $praticien = $this->praticien();
-        // RDV de 10:00 à 10:30 (CI)
         $praticien->chargerRendezVous([
             new RendezVous('r1', 'p1', 'pat', new DateTimeImmutable('2030-12-20 10:00'), 30),
         ]);

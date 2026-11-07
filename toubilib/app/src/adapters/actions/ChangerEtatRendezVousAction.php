@@ -13,7 +13,6 @@ use toubilib\application\exceptions\RendezVousNotFoundException;
 use toubilib\application\ports\api\ServiceRendezVousInterface;
 use toubilib\domain\exceptions\TransitionEtatRendezVousException;
 
-/** Marque un rendez-vous comme honoré ($honorer = true) ou ignoré (patient absent). */
 final class ChangerEtatRendezVousAction
 {
     public function __construct(
