@@ -11,6 +11,7 @@ use PDOException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Response;
+use toubilib\application\exceptions\PraticienNotFoundException;
 use toubilib\application\ports\api\ServiceRendezVousInterface;
 
 final class ListerRendezVousPraticienAction
@@ -37,6 +38,8 @@ final class ListerRendezVousPraticienAction
 
         try {
             $rdvs = $this->service->agenda($args['id'], $debut, $fin);
+        } catch (PraticienNotFoundException $e) {
+            return $this->json(['erreur' => $e->getMessage()], 404);
         } catch (PDOException) {
             return $this->json(['erreur' => 'Erreur de persistance.'], 500);
         }

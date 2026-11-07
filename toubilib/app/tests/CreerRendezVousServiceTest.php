@@ -99,4 +99,18 @@ final class CreerRendezVousServiceTest extends TestCase
         $this->expectException(PatientNotFoundException::class);
         $service->creer($this->dto(patientId: 'absent'));
     }
+
+    public function testAgendaEtHistoriqueRefusentUnProfilInexistant(): void
+    {
+        $service = $this->service(null, null);
+
+        try {
+            $service->agenda('absent', new DateTimeImmutable('2030-01-01'), new DateTimeImmutable('2030-01-02'));
+            self::fail('PraticienNotFoundException attendue');
+        } catch (PraticienNotFoundException) {
+        }
+
+        $this->expectException(PatientNotFoundException::class);
+        $service->historique('absent');
+    }
 }

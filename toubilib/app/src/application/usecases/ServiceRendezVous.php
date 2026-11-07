@@ -67,11 +67,13 @@ final class ServiceRendezVous implements ServiceRendezVousInterface
 
     public function historique(string $patientId): array
     {
+        $this->createValidator->exigerPatient($patientId);
         return array_map(RendezVousDTO::fromEntity(...), $this->repository->findByPatient($patientId));
     }
 
     public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array
     {
+        $this->createValidator->exigerPraticien($praticienId);
         return array_map(
             RendezVousDTO::fromEntity(...),
             $this->repository->findByPraticienEtPeriode($praticienId, $debut, $fin),

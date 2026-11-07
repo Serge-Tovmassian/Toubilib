@@ -19,6 +19,16 @@ final readonly class CreateRendezVousValidator
     ) {
     }
 
+    public function exigerPraticien(string $id): void
+    {
+        $this->praticienRepository->findById($id) ?? throw new PraticienNotFoundException($id);
+    }
+
+    public function exigerPatient(string $id): void
+    {
+        $this->patientRepository->findById($id) ?? throw new PatientNotFoundException($id);
+    }
+
     public function validerIndisponibilite(string $praticienId, \DateTimeImmutable $jour, string $periode): RendezVous
     {
         $praticien = $this->praticienRepository->findByIdWithRendezVousForDate($praticienId, $jour)

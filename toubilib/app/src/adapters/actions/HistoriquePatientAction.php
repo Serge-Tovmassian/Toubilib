@@ -9,6 +9,7 @@ use PDOException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Response;
+use toubilib\application\exceptions\PatientNotFoundException;
 use toubilib\application\ports\api\ServiceRendezVousInterface;
 
 final class HistoriquePatientAction
@@ -22,6 +23,8 @@ final class HistoriquePatientAction
     {
         try {
             $rdvs = $this->service->historique($args['id']);
+        } catch (PatientNotFoundException $e) {
+            return $this->json(['erreur' => $e->getMessage()], 404);
         } catch (PDOException) {
             return $this->json(['erreur' => 'Erreur de persistance.'], 500);
         }
