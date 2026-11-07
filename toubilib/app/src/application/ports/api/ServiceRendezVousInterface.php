@@ -21,5 +21,8 @@ interface ServiceRendezVousInterface
     public function ignorer(string $id): RendezVousDTO;
 
     /** @return list<RendezVousDTO> */
+    public function historique(string $patientId): array;
+
+    /** @return list<RendezVousDTO> */
     public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array;
 }

@@ -61,6 +61,7 @@ final class CreerRendezVousServiceTest extends TestCase
         $rendezVous = new class implements RendezVousRepositoryInterface {
             public function findById(string $id): ?RendezVous { return null; }
             public function findByPraticienEtPeriode(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array { return []; }
+            public function findByPatient(string $patientId): array { return []; }
             public array $inseres = [];
             public function insert(RendezVous $rendezVous): void { $this->inseres[] = $rendezVous; }
             public function save(RendezVous $rendezVous): void {}

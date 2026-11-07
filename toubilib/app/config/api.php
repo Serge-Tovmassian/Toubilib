@@ -5,6 +5,7 @@ declare(strict_types=1);
 use toubilib\adapters\actions\AnnulerRendezVousAction;
 use toubilib\adapters\actions\ChangerEtatRendezVousAction;
 use toubilib\adapters\actions\CreerRendezVousAction;
+use toubilib\adapters\actions\HistoriquePatientAction;
 use toubilib\adapters\actions\ListerPraticiensAction;
 use toubilib\adapters\actions\ListerRendezVousPraticienAction;
 use toubilib\adapters\actions\ObtenirPraticienAction;
@@ -28,6 +29,8 @@ return [
         ->constructor(get(ServiceRendezVousInterface::class), true),
     'ignorer.rdv' => create(ChangerEtatRendezVousAction::class)
         ->constructor(get(ServiceRendezVousInterface::class), false),
+    HistoriquePatientAction::class => create(HistoriquePatientAction::class)
+        ->constructor(get(ServiceRendezVousInterface::class)),
     CreerRendezVousAction::class => create(CreerRendezVousAction::class)
         ->constructor(get(ServiceRendezVousInterface::class)),
     ObtenirRendezVousAction::class =>create(ObtenirRendezVousAction::class)

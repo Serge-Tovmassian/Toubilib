@@ -14,6 +14,9 @@ interface RendezVousRepositoryInterface
     /** @return list<RendezVous> rendez-vous non annulés, triés par date */
     public function findByPraticienEtPeriode(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array;
 
+    /** @return list<RendezVous> tous états confondus, du plus récent au plus ancien */
+    public function findByPatient(string $patientId): array;
+
     public function insert(RendezVous $rendezVous): void;
 
     public function save(RendezVous $rendezVous): void;

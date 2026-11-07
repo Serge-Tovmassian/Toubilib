@@ -28,6 +28,7 @@ final class ChangerEtatRendezVousActionTest extends TestCase
                 return new RendezVousDTO('rdv-1', 'p1', 'pat1', '2030-01-01T10:00:00+01:00', null, 30, $etat, 'CI');
             }
             public function creer(CreateRdvDTO $dto): RendezVousDTO { throw new LogicException(); }
+            public function historique(string $patientId): array { return []; }
             public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array { return []; }
             public function obtenirParId(string $id): RendezVousDTO { throw new LogicException(); }
             public function annuler(string $id): RendezVousDTO { throw new LogicException(); }

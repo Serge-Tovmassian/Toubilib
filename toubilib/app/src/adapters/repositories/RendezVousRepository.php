@@ -64,6 +64,18 @@ final class RendezVousRepository implements RendezVousRepositoryInterface
         );
     }
 
+    public function findByPatient(string $patientId): array
+    {
+        $statement = $this->pdo->prepare(
+            'SELECT id, praticien_id, patient_id, date_heure_debut, duree, '
+            . 'date_heure_fin, date_creation, motif_visite, status FROM rdv '
+            . 'WHERE patient_id = :patient ORDER BY date_heure_debut DESC',
+        );
+        $statement->execute(['patient' => $patientId]);
+
+        return array_map($this->hydrate(...), $statement->fetchAll(PDO::FETCH_ASSOC));
+    }
+
     public function insert(RendezVous $rendezVous): void
     {
         $this->pdo->prepare(

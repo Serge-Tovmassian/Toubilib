@@ -57,6 +57,11 @@ final class ServiceRendezVous implements ServiceRendezVousInterface
         return RendezVousDTO::fromEntity($this->trouver($id));
     }
 
+    public function historique(string $patientId): array
+    {
+        return array_map(RendezVousDTO::fromEntity(...), $this->repository->findByPatient($patientId));
+    }
+
     public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array
     {
         return array_map(
