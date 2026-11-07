@@ -20,6 +20,15 @@ docker compose up -d --build
 Charger la base une première fois depuis Adminer (onglet « Importer ») avec, dans cet ordre,
 `app/sql/toubilib.schema.sql` puis `app/sql/toubilib.data.sql`.
 
+Authentification : `JWT_SECRET` (32 caractères minimum) signe les jetons. Après l'import de la base, créer les comptes de démo
+(un par patient et par praticien, email de la fiche, mot de passe `toubilib` par défaut) :
+
+```
+docker compose exec api.toubilib php bin/seed-users.php
+```
+
+`POST /auth/login` avec `{"email","password"}` renvoie un JWT valable 1 h (`Authorization: Bearer …`).
+
 Tests : `cd toubilib/app && php vendor/bin/phpunit tests`
 
 ## Architecture

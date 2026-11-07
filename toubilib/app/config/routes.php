@@ -8,9 +8,11 @@ use toubilib\adapters\actions\DeclarerIndisponibiliteAction;
 use toubilib\adapters\actions\DisponibilitesPraticienAction;
 use toubilib\adapters\actions\HistoriquePatientAction;
 use toubilib\adapters\actions\ListerPraticiensAction;
+use toubilib\adapters\actions\LoginAction;
 use toubilib\adapters\actions\ObtenirPraticienAction;
 use toubilib\adapters\actions\ObtenirRendezVousAction;
 
+$app->post('/auth/login', LoginAction::class);
 $app->get('/praticiens',ListerPraticiensAction::class);
 $app->get('/praticiens/{id}', ObtenirPraticienAction::class);
 $app->get('/praticiens/{id}/disponibilites', DisponibilitesPraticienAction::class);

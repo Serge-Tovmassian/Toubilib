@@ -45,6 +45,18 @@ CREATE TABLE "public"."rdv" (
 ) WITH (oids = false);
 
 
+DROP TABLE IF EXISTS "users";
+CREATE TABLE "public"."users" (
+    "id" character varying(64) NOT NULL,
+    "email" character varying(128) NOT NULL,
+    "password_hash" character varying(255) NOT NULL,
+    "role" character varying(16) NOT NULL,
+    "profil_id" character varying(64) NOT NULL,
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id"),
+    CONSTRAINT "users_email_key" UNIQUE ("email")
+) WITH (oids = false);
+
+
 DROP TABLE IF EXISTS "specialite";
 DROP SEQUENCE IF EXISTS specialite_id_seq;
 CREATE SEQUENCE specialite_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1;

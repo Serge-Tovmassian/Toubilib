@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 return [
     'settings' => [
+        'jwt_secret' => getenv('JWT_SECRET') ?: null,
         'database' => [
             'driver' => getenv('POSTGRES_DRIVER') ?: 'pgsql',
             'host' => getenv('POSTGRES_HOST') ?: 'toubilib.db',

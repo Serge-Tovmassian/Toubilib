@@ -6,6 +6,10 @@ use Psr\Container\ContainerInterface;
 use toubilib\adapters\repositories\PatientRepository;
 use toubilib\adapters\repositories\PraticienRepository;
 use toubilib\adapters\repositories\RendezVousRepository;
+use toubilib\adapters\repositories\UtilisateurRepository;
+use toubilib\application\ports\api\ServiceAuthInterface;
+use toubilib\application\ports\spi\UtilisateurRepositoryInterface;
+use toubilib\application\usecases\ServiceAuth;
 use toubilib\application\ports\api\ServicePraticienInterface;
 use toubilib\application\ports\api\ServiceRendezVousInterface;
 use toubilib\application\ports\spi\PraticienRepositoryInterface;
@@ -46,6 +50,16 @@ return [
         ->constructor(get(PDO::class)),
     RendezVousRepositoryInterface::class => create(RendezVousRepository::class)
         ->constructor(get(PDO::class)),
+    UtilisateurRepositoryInterface::class => create(UtilisateurRepository::class)
+        ->constructor(get(PDO::class)),
+    ServiceAuthInterface::class => static function (ContainerInterface $container): ServiceAuth {
+        $secret = $container->get('settings')['jwt_secret'];
+        if ($secret === null || strlen($secret) < 32) {
+            throw new RuntimeException('JWT_SECRET manquant ou trop court (32 caractères minimum).');
+        }
+
+        return new ServiceAuth($container->get(UtilisateurRepositoryInterface::class), $secret);
+    },
     CreateRendezVousValidator::class => create(CreateRendezVousValidator::class)
         ->constructor(
             get(PraticienRepositoryInterface::class),

@@ -9,6 +9,8 @@ use toubilib\adapters\actions\DeclarerIndisponibiliteAction;
 use toubilib\adapters\actions\DisponibilitesPraticienAction;
 use toubilib\adapters\actions\HistoriquePatientAction;
 use toubilib\adapters\actions\ListerPraticiensAction;
+use toubilib\adapters\actions\LoginAction;
+use toubilib\application\ports\api\ServiceAuthInterface;
 use toubilib\adapters\actions\ListerRendezVousPraticienAction;
 use toubilib\adapters\actions\ObtenirPraticienAction;
 use toubilib\adapters\actions\ObtenirRendezVousAction;
@@ -35,6 +37,8 @@ return [
         ->constructor(get(ServicePraticienInterface::class)),
     DeclarerIndisponibiliteAction::class => create(DeclarerIndisponibiliteAction::class)
         ->constructor(get(ServiceRendezVousInterface::class)),
+    LoginAction::class => create(LoginAction::class)
+        ->constructor(get(ServiceAuthInterface::class)),
     HistoriquePatientAction::class => create(HistoriquePatientAction::class)
         ->constructor(get(ServiceRendezVousInterface::class)),
     CreerRendezVousAction::class => create(CreerRendezVousAction::class)
