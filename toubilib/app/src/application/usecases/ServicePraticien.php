@@ -16,9 +16,16 @@ final class ServicePraticien implements ServicePraticienInterface
     {
     }
 
-    public function lister(): array
+    public function lister(?string $specialite = null, ?string $ville = null): array
     {
-        return array_map(PraticienResumeDTO::fromEntity(...), $this->repository->findAll());
+        // ponytail: filtre en mémoire (liste courte) ; passer en SQL si la table grossit
+        $egal = static fn (string $a, ?string $b): bool => $b === null || mb_strtolower($a) === mb_strtolower($b);
+        $praticiens = array_filter(
+            $this->repository->findAll(),
+            fn ($p) => $egal($p->getSpecialite()->getLibelle(), $specialite) && $egal($p->getVille(), $ville),
+        );
+
+        return array_map(PraticienResumeDTO::fromEntity(...), array_values($praticiens));
     }
 
     public function obtenirParId(string $id): PraticienDTO

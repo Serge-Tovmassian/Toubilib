@@ -21,10 +21,17 @@ final class ListerPraticiensAction
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         try {
-            return $this->json($this->service->lister(), 200);
+            return $this->json($this->service->lister($this->param($request, 'specialite'), $this->param($request, 'ville')), 200);
         } catch (PDOException) {
             return $this->json(['erreur' => 'Erreur de persistance.'], 500);
         }
+    }
+
+    private function param(ServerRequestInterface $request, string $nom): ?string
+    {
+        $valeur = trim((string) ($request->getQueryParams()[$nom] ?? ''));
+
+        return $valeur === '' ? null : $valeur;
     }
 
     /** @throws JsonException */

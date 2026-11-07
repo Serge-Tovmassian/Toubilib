@@ -24,7 +24,7 @@ final class ActionsConsultationTest extends TestCase
     public function testListeLesPraticiensEnJson(): void
     {
         $service = new class implements ServicePraticienInterface {
-            public function lister(): array
+            public function lister(?string $specialite = null, ?string $ville = null): array
             {
                 return [new PraticienResumeDTO('p1', 'Dupont', 'Alice', 'Dr.', 'Nancy', 'Cardiologie')];
             }
@@ -41,7 +41,7 @@ final class ActionsConsultationTest extends TestCase
     public function testRetourne404PourUnPraticienAbsent(): void
     {
         $service = new class implements ServicePraticienInterface {
-            public function lister(): array { return []; }
+            public function lister(?string $specialite = null, ?string $ville = null): array { return []; }
             public function obtenirParId(string $id): PraticienDTO { throw new PraticienNotFoundException($id); }
         };
         $request = (new ServerRequestFactory())->createServerRequest('GET', '/praticiens/absent');

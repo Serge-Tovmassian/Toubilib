@@ -9,7 +9,7 @@ use toubilib\application\dto\PraticienDTO;
 interface ServicePraticienInterface
 {
     /** @return list<\toubilib\application\dto\PraticienResumeDTO> */
-    public function lister(): array;
+    public function lister(?string $specialite = null, ?string $ville = null): array;
 
     public function obtenirParId(string $id): PraticienDTO;
 }

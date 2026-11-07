@@ -70,6 +70,11 @@ final class ServicesConsultationTest extends TestCase
         self::assertCount(1, $resultat);
         self::assertSame('praticien-1', $resultat[0]->id);
         self::assertSame('Médecine générale', $resultat[0]->specialite);
+
+        $service = new ServicePraticien($repository);
+        self::assertCount(1, $service->lister('médecine GÉNÉRALE', $praticien->getVille()));
+        self::assertCount(0, $service->lister('Dentiste'));
+        self::assertCount(0, $service->lister(null, 'Paris-introuvable'));
     }
 
     public function testRetourneLeDetailDuPraticien(): void
