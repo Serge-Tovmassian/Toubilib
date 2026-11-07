@@ -17,10 +17,10 @@ docker compose up -d --build
 
 `CORS_ORIGINS` liste (séparée par des virgules) les origines navigateur autorisées ; sans correspondance, aucun en-tête CORS n'est envoyé.
 
-Charger la base une première fois depuis Adminer (onglet « Importer ») avec, dans cet ordre,
-`app/sql/toubilib.schema.sql` puis `app/sql/toubilib.data.sql`.
+La base est créée et peuplée automatiquement (`app/sql/toubilib.schema.sql` puis `toubilib.data.sql`) au premier démarrage du conteneur PostgreSQL.
+Pour repartir de zéro : `docker compose down -v && docker compose up -d`.
 
-Authentification : `JWT_SECRET` (32 caractères minimum) signe les jetons. Après l'import de la base, créer les comptes de démo
+Authentification : `JWT_SECRET` (32 caractères minimum) signe les jetons. Une fois la base prête, créer les comptes de démo
 (un par patient et par praticien, email de la fiche, mot de passe `toubilib` par défaut) :
 
 ```

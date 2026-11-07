@@ -31,7 +31,8 @@ services:
     networks:
       - toubilib.net
     volumes:
-      - ./sql:/var/sql
+      - ./app/sql/toubilib.schema.sql:/docker-entrypoint-initdb.d/1-schema.sql:ro
+      - ./app/sql/toubilib.data.sql:/docker-entrypoint-initdb.d/2-data.sql:ro
 
 
   adminer:
