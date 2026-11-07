@@ -45,6 +45,8 @@ Les réponses JSON suivent un format HATEOAS : `{"type": "ressource|collection",
 
 ## Routes
 
+Toutes les routes, sauf `POST /auth/login`, exigent un en-tête `Authorization: Bearer <jwt>` (401 sinon).
+
 | Méthode | Route | Description |
 |---|---|---|
 | GET | `/praticiens?specialite=&ville=` | Liste des praticiens, filtrable |

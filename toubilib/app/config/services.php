@@ -52,14 +52,16 @@ return [
         ->constructor(get(PDO::class)),
     UtilisateurRepositoryInterface::class => create(UtilisateurRepository::class)
         ->constructor(get(PDO::class)),
-    ServiceAuthInterface::class => static function (ContainerInterface $container): ServiceAuth {
+    'jwt.secret' => static function (ContainerInterface $container): string {
         $secret = $container->get('settings')['jwt_secret'];
         if ($secret === null || strlen($secret) < 32) {
             throw new RuntimeException('JWT_SECRET manquant ou trop court (32 caractères minimum).');
         }
 
-        return new ServiceAuth($container->get(UtilisateurRepositoryInterface::class), $secret);
+        return $secret;
     },
+    ServiceAuthInterface::class => create(ServiceAuth::class)
+        ->constructor(get(UtilisateurRepositoryInterface::class), get('jwt.secret')),
     CreateRendezVousValidator::class => create(CreateRendezVousValidator::class)
         ->constructor(
             get(PraticienRepositoryInterface::class),

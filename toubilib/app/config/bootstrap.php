@@ -19,6 +19,8 @@ require __DIR__ . '/routes.php';
 $app->addRoutingMiddleware();
 $app->addErrorMiddleware(false, true, true);
 
+$app->add(new \toubilib\adapters\middlewares\AuthMiddleware($container->get('jwt.secret')));
+
 // CORS : ajouté en dernier = exécuté en premier, donc les erreurs portent aussi les en-têtes.
 $app->add(function ($request, $handler) {
     $response = $request->getMethod() === 'OPTIONS'
