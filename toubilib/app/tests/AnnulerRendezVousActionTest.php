@@ -23,6 +23,8 @@ final class AnnulerRendezVousActionTest extends TestCase
             {
             }
 
+            public function honorer(string $id): RendezVousDTO { throw new LogicException(); }
+            public function ignorer(string $id): RendezVousDTO { throw new LogicException(); }
             public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array { return []; }
 
             public function annuler(string $id): RendezVousDTO

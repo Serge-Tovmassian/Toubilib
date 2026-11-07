@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use toubilib\adapters\actions\AnnulerRendezVousAction;
+use toubilib\adapters\actions\ChangerEtatRendezVousAction;
 use toubilib\adapters\actions\CreerRendezVousAction;
 use toubilib\adapters\actions\ListerPraticiensAction;
 use toubilib\adapters\actions\ListerRendezVousPraticienAction;
@@ -23,6 +24,10 @@ return [
         ->constructor(get(ServiceRendezVousInterface::class), false),
     'creneaux.praticien' => create(ListerRendezVousPraticienAction::class)
         ->constructor(get(ServiceRendezVousInterface::class), true),
+    'honorer.rdv' => create(ChangerEtatRendezVousAction::class)
+        ->constructor(get(ServiceRendezVousInterface::class), true),
+    'ignorer.rdv' => create(ChangerEtatRendezVousAction::class)
+        ->constructor(get(ServiceRendezVousInterface::class), false),
     CreerRendezVousAction::class => create(CreerRendezVousAction::class)
         ->constructor(get(ServiceRendezVousInterface::class)),
     ObtenirRendezVousAction::class =>create(ObtenirRendezVousAction::class)

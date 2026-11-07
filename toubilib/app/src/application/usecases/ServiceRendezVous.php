@@ -36,6 +36,22 @@ final class ServiceRendezVous implements ServiceRendezVousInterface
         return RendezVousDTO::fromEntity($rendezVous);
     }
 
+    public function honorer(string $id): RendezVousDTO
+    {
+        $rendezVous = $this->trouver($id);
+        $rendezVous->honorer();
+        $this->repository->save($rendezVous);
+        return RendezVousDTO::fromEntity($rendezVous);
+    }
+
+    public function ignorer(string $id): RendezVousDTO
+    {
+        $rendezVous = $this->trouver($id);
+        $rendezVous->marquerNonHonore();
+        $this->repository->save($rendezVous);
+        return RendezVousDTO::fromEntity($rendezVous);
+    }
+
     public function obtenirParId(string $id): RendezVousDTO
     {
         return RendezVousDTO::fromEntity($this->trouver($id));

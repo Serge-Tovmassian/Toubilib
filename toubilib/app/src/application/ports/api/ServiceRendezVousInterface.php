@@ -16,6 +16,10 @@ interface ServiceRendezVousInterface
 
     public function annuler(string $id): RendezVousDTO;
 
+    public function honorer(string $id): RendezVousDTO;
+
+    public function ignorer(string $id): RendezVousDTO;
+
     /** @return list<RendezVousDTO> */
     public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array;
 }

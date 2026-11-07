@@ -15,3 +15,5 @@ $app->get('/praticiens/{id}/creneaux', 'creneaux.praticien');
 $app->post('/rdvs', CreerRendezVousAction::class);
 $app->get('/rdvs/{id}',ObtenirRendezVousAction::class);
 $app->patch('/rdvs/{id}/annuler', AnnulerRendezVousAction::class);
+$app->patch('/rdvs/{id}/honorer', 'honorer.rdv');
+$app->patch('/rdvs/{id}/ignorer', 'ignorer.rdv');
