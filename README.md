@@ -54,7 +54,7 @@ Droits d'accès (403 sinon) :
 | `GET /praticiens`, `/praticiens/{id}`, `/praticiens/{id}/disponibilites` | tout utilisateur authentifié |
 | `GET /praticiens/{id}/agenda`, `/creneaux`, `POST /praticiens/{id}/indisponibilites` | ce praticien uniquement |
 | `GET /patients/{id}/rdvs` | ce patient uniquement |
-| `POST /rdvs` | un patient, pour lui-même |
+| `POST /rdvs` | un patient pour lui-même, ou un praticien dans son propre agenda |
 | `GET /rdvs/{id}`, `PATCH /rdvs/{id}/annuler` | le patient ou le praticien du RDV |
 | `PATCH /rdvs/{id}/honorer`, `/ignorer` | le praticien du RDV |
 
@@ -63,7 +63,7 @@ Droits d'accès (403 sinon) :
 | GET | `/praticiens?specialite=&ville=` | Liste des praticiens, filtrable |
 | GET | `/praticiens/{id}` | Détail d'un praticien |
 | GET | `/praticiens/{id}/disponibilites?date=YYYY-MM-DD&motif=CI` | Créneaux libres d'une journée pour un motif |
-| GET | `/praticiens/{id}/agenda?debut=&fin=` | Agenda sur une période (dates ISO 8601) |
+| GET | `/praticiens/{id}/agenda?debut=&fin=` | Agenda sur une période (dates ISO 8601), avec le nom du patient de chaque RDV |
 | GET | `/praticiens/{id}/creneaux?debut=&fin=` | Créneaux occupés sur une période |
 | POST | `/praticiens/{id}/indisponibilites` | Bloque une demi-journée `{"date","periode":"matin\|apres-midi"}` |
 | GET | `/patients/{id}/rdvs` | Historique des consultations d'un patient |

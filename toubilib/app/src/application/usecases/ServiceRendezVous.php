@@ -7,6 +7,7 @@ namespace toubilib\application\usecases;
 use DateTimeImmutable;
 use toubilib\application\dto\CreateRdvDTO;
 use toubilib\application\dto\RendezVousDTO;
+use toubilib\application\exceptions\PatientNotFoundException;
 use toubilib\application\exceptions\RendezVousNotFoundException;
 use toubilib\application\ports\api\ServiceRendezVousInterface;
 use toubilib\application\ports\spi\RendezVousRepositoryInterface;
@@ -74,10 +75,20 @@ final class ServiceRendezVous implements ServiceRendezVousInterface
     public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array
     {
         $this->createValidator->exigerPraticien($praticienId);
-        return array_map(
-            RendezVousDTO::fromEntity(...),
-            $this->repository->findByPraticienEtPeriode($praticienId, $debut, $fin),
-        );
+        $noms = [];
+        return array_map(function ($rdv) use (&$noms) {
+            $id = $rdv->getPatientId();
+            if ($id !== null && !array_key_exists($id, $noms)) {
+                try {
+                    $patient = $this->createValidator->exigerPatient($id);
+                    $noms[$id] = $patient->getPrenom() . ' ' . $patient->getNom();
+                } catch (PatientNotFoundException) {
+                    $noms[$id] = null;
+                }
+            }
+
+            return RendezVousDTO::fromEntity($rdv, $id === null ? null : $noms[$id]);
+        }, $this->repository->findByPraticienEtPeriode($praticienId, $debut, $fin));
     }
 
     private function trouver(string $id): \toubilib\domain\entities\RendezVous

@@ -40,7 +40,12 @@ final class CreerRendezVousAction
         }
 
         $auth = $request->getAttribute('auth');
-        if (($auth['role'] ?? null) !== 'patient' || $auth['profil_id'] !== $data['patient_id']) {
+        $autorise = match ($auth['role'] ?? null) {
+            'patient' => $auth['profil_id'] === $data['patient_id'],
+            'praticien' => $auth['profil_id'] === $data['praticien_id'],
+            default => false,
+        };
+        if (!$autorise) {
             return $this->json(['erreur' => 'Accès interdit.'], 403);
         }
 

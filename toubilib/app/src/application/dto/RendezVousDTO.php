@@ -18,10 +18,11 @@ final readonly class RendezVousDTO implements JsonSerializable
         public int $duree,
         public string $etat,
         public ?string $motifVisite,
+        public ?string $patientNom = null,
     ) {
     }
 
-    public static function fromEntity(RendezVous $rendezVous): self
+    public static function fromEntity(RendezVous $rendezVous, ?string $patientNom = null): self
     {
         return new self(
             id: $rendezVous->getId(),
@@ -32,11 +33,12 @@ final readonly class RendezVousDTO implements JsonSerializable
             duree: $rendezVous->getDuree(),
             etat: $rendezVous->getEtat()->name,
             motifVisite: $rendezVous->getMotifVisite(),
+            patientNom: $patientNom,
         );
     }
 
     /**
-     * @return array<string, int|string|null>
+     * @return array<string, int|string|null> patient_nom n'est présent que pour l'agenda
      */
     public function jsonSerialize(): array
     {
@@ -49,6 +51,7 @@ final readonly class RendezVousDTO implements JsonSerializable
             'duree' => $this->duree,
             'etat' => $this->etat,
             'motif_visite' => $this->motifVisite,
+            ...($this->patientNom === null ? [] : ['patient_nom' => $this->patientNom]),
         ];
     }
 }

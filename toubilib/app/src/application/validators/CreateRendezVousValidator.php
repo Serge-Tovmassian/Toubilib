@@ -9,6 +9,7 @@ use toubilib\application\exceptions\PatientNotFoundException;
 use toubilib\application\exceptions\PraticienNotFoundException;
 use toubilib\application\ports\spi\PatientRepositoryInterface;
 use toubilib\application\ports\spi\PraticienRepositoryInterface;
+use toubilib\domain\entities\Patient;
 use toubilib\domain\entities\RendezVous;
 
 final readonly class CreateRendezVousValidator
@@ -24,9 +25,9 @@ final readonly class CreateRendezVousValidator
         $this->praticienRepository->findById($id) ?? throw new PraticienNotFoundException($id);
     }
 
-    public function exigerPatient(string $id): void
+    public function exigerPatient(string $id): Patient
     {
-        $this->patientRepository->findById($id) ?? throw new PatientNotFoundException($id);
+        return $this->patientRepository->findById($id) ?? throw new PatientNotFoundException($id);
     }
 
     public function validerIndisponibilite(string $praticienId, \DateTimeImmutable $jour, string $periode): RendezVous
