@@ -72,11 +72,11 @@ final class Praticien
         $dateHeureFin = $dateHeureDebut->modify("+{$duree} minutes");
 
         if ($dateHeureDebut <= $maintenant) {
-            throw new DateRendezVousInvalideException('La date du rendez-vous doit etre future.');
+            throw new DateRendezVousInvalideException('La date du rendez-vous doit être future.');
         }
 
         if (!in_array((int) $dateHeureDebut->format('N'), $this->joursOuvrables, true)) {
-            throw new DateRendezVousInvalideException('Le rendez-vous doit etre fixe un jour ouvrable.');
+            throw new DateRendezVousInvalideException('Le rendez-vous doit être fixé un jour ouvrable.');
         }
 
         if (
@@ -84,7 +84,7 @@ final class Praticien
             || $dateHeureFin->format('Y-m-d') !== $dateHeureDebut->format('Y-m-d')
             || $dateHeureFin->format('H:i') > $this->heureFermeture
         ) {
-            throw new DateRendezVousInvalideException('Le rendez-vous est en dehors des horaires acceptes.');
+            throw new DateRendezVousInvalideException('Le rendez-vous est en dehors des horaires acceptés.');
         }
     }
 
@@ -127,7 +127,7 @@ final class Praticien
         [$de, $a] = match ($periode) {
             'matin' => [$this->heureOuverture, '12:00'],
             'apres-midi' => ['12:00', $this->heureFermeture],
-            default => throw new DateRendezVousInvalideException('Periode invalide : matin ou apres-midi.'),
+            default => throw new DateRendezVousInvalideException('Période invalide : matin ou apres-midi.'),
         };
         $date = $jour->format('Y-m-d');
         $debut = new DateTimeImmutable("{$date} {$de}");
@@ -145,7 +145,7 @@ final class Praticien
     {
         foreach ($rendezVous as $rendezVousExistant) {
             if ($rendezVousExistant->getPraticienId() !== $this->id) {
-                throw new \InvalidArgumentException('Le rendez-vous appartient a un autre praticien.');
+                throw new \InvalidArgumentException('Le rendez-vous appartient à un autre praticien.');
             }
         }
 
@@ -160,7 +160,7 @@ final class Praticien
                 && $demande->chevauche($rendezVousExistant)
             ) {
                 throw new CreneauRendezVousIndisponibleException(
-                    'Le praticien est indisponible sur le creneau demande.',
+                    'Le praticien est indisponible sur le créneau demandé.',
                 );
             }
         }

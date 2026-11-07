@@ -80,13 +80,13 @@ final class RendezVous
 
         if ($this->etat !== EtatRendezVous::PLANIFIE) {
             throw new TransitionEtatRendezVousException(
-                'Seul un rendez-vous planifie peut etre annule.',
+                'Seul un rendez-vous planifié peut être annulé.',
             );
         }
 
         if ($this->dateHeureDebut <= $maintenant) {
             throw new TransitionEtatRendezVousException(
-                'Un rendez-vous passe ne peut pas etre annule.',
+                'Un rendez-vous passé ne peut pas être annulé.',
             );
         }
 
@@ -107,7 +107,7 @@ final class RendezVous
     {
         if ($this->etat !== EtatRendezVous::PLANIFIE) {
             throw new TransitionEtatRendezVousException(
-                'Seul un rendez-vous planifie peut etre termine.',
+                'Seul un rendez-vous planifié peut être terminé.',
             );
         }
 

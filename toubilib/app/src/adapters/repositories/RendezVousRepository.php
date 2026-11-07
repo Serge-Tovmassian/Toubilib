@@ -6,7 +6,7 @@ namespace toubilib\adapters\repositories;
 
 use DateTimeImmutable;
 use PDO;
-use RuntimeException;
+use toubilib\application\exceptions\RendezVousNotFoundException;
 use toubilib\application\ports\spi\RendezVousRepositoryInterface;
 use toubilib\domain\entities\EtatRendezVous;
 use toubilib\domain\entities\RendezVous;
@@ -103,7 +103,7 @@ final class RendezVousRepository implements RendezVousRepositoryInterface
         $statement->execute();
 
         if ($statement->rowCount() === 0) {
-            throw new RuntimeException('Rendez-vous introuvable lors de la sauvegarde.');
+            throw new RendezVousNotFoundException($rendezVous->getId());
         }
     }
 }
