@@ -47,6 +47,17 @@ Les réponses JSON suivent un format HATEOAS : `{"type": "ressource|collection",
 
 Toutes les routes, sauf `POST /auth/login`, exigent un en-tête `Authorization: Bearer <jwt>` (401 sinon).
 
+Droits d'accès (403 sinon) :
+
+| Route | Accès |
+|---|---|
+| `GET /praticiens`, `/praticiens/{id}`, `/praticiens/{id}/disponibilites` | tout utilisateur authentifié |
+| `GET /praticiens/{id}/agenda`, `/creneaux`, `POST /praticiens/{id}/indisponibilites` | ce praticien uniquement |
+| `GET /patients/{id}/rdvs` | ce patient uniquement |
+| `POST /rdvs` | un patient, pour lui-même |
+| `GET /rdvs/{id}`, `PATCH /rdvs/{id}/annuler` | le patient ou le praticien du RDV |
+| `PATCH /rdvs/{id}/honorer`, `/ignorer` | le praticien du RDV |
+
 | Méthode | Route | Description |
 |---|---|---|
 | GET | `/praticiens?specialite=&ville=` | Liste des praticiens, filtrable |

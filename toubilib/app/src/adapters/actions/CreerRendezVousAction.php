@@ -39,6 +39,11 @@ final class CreerRendezVousAction
             }
         }
 
+        $auth = $request->getAttribute('auth');
+        if (($auth['role'] ?? null) !== 'patient' || $auth['profil_id'] !== $data['patient_id']) {
+            return $this->json(['erreur' => 'Accès interdit.'], 403);
+        }
+
         try {
             $debut = new DateTimeImmutable($data['date_heure_debut']);
         } catch (Exception) {
