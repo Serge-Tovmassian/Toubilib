@@ -29,6 +29,7 @@ final class ActionsConsultationTest extends TestCase
                 return [new PraticienResumeDTO('p1', 'Dupont', 'Alice', 'Dr.', 'Nancy', 'Cardiologie')];
             }
             public function obtenirParId(string $id): PraticienDTO { throw new LogicException(); }
+            public function disponibilites(string $id, DateTimeImmutable $jour, string $motif): array { return []; }
         };
         $request = (new ServerRequestFactory())->createServerRequest('GET', '/praticiens');
 
@@ -43,6 +44,7 @@ final class ActionsConsultationTest extends TestCase
         $service = new class implements ServicePraticienInterface {
             public function lister(?string $specialite = null, ?string $ville = null): array { return []; }
             public function obtenirParId(string $id): PraticienDTO { throw new PraticienNotFoundException($id); }
+            public function disponibilites(string $id, DateTimeImmutable $jour, string $motif): array { return []; }
         };
         $request = (new ServerRequestFactory())->createServerRequest('GET', '/praticiens/absent');
 

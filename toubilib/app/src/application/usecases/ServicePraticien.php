@@ -28,6 +28,19 @@ final class ServicePraticien implements ServicePraticienInterface
         return array_map(PraticienResumeDTO::fromEntity(...), array_values($praticiens));
     }
 
+    public function disponibilites(string $id, \DateTimeImmutable $jour, string $motif): array
+    {
+        $praticien = $this->repository->findByIdWithRendezVousForDate($id, $jour);
+        if ($praticien === null) {
+            throw new PraticienNotFoundException($id);
+        }
+
+        return array_map(
+            static fn (\DateTimeImmutable $d) => $d->format(DATE_ATOM),
+            $praticien->creneauxDisponibles($jour, $motif),
+        );
+    }
+
     public function obtenirParId(string $id): PraticienDTO
     {
         $praticien = $this->repository->findById($id);

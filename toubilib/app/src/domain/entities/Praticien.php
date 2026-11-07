@@ -88,6 +88,36 @@ final class Praticien
         }
     }
 
+    /**
+     * Débuts de créneaux libres pour un motif sur une journée (pas = durée du motif).
+     * Suppose les rendez-vous du jour chargés (chargerRendezVous).
+     *
+     * @return list<DateTimeImmutable>
+     */
+    public function creneauxDisponibles(
+        DateTimeImmutable $jour,
+        string $motif,
+        ?DateTimeImmutable $maintenant = null,
+    ): array {
+        $duree = $this->calculerDuree($motif);
+        [$h, $m] = array_map('intval', explode(':', $this->heureOuverture));
+        $libres = [];
+
+        for ($debut = $jour->setTime($h, $m); $debut->format('Y-m-d') === $jour->format('Y-m-d'); $debut = $debut->modify("+{$duree} minutes")) {
+            try {
+                $this->verifierDateRendezVous($debut, $duree, $maintenant);
+                $this->verifierDisponibilite(
+                    new RendezVous('dispo', $this->id, 'dispo', $debut, $duree, $debut->modify("+{$duree} minutes")),
+                );
+                $libres[] = $debut;
+            } catch (\DomainException) {
+                // créneau hors horaires, passé ou déjà occupé
+            }
+        }
+
+        return $libres;
+    }
+
     /** @param list<RendezVous> $rendezVous */
     public function chargerRendezVous(array $rendezVous): void
     {
