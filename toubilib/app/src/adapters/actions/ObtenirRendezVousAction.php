@@ -26,7 +26,20 @@ final class ObtenirRendezVousAction
         }
 
         try {
-            return $this->json($this->service->obtenirParId($args['id']), 200);
+            $rdv = $this->service->obtenirParId($args['id']);
+            $base = '/rdvs/' . $rdv->id;
+            return $this->json([
+                'type' => 'ressource',
+                'rendez_vous' => $rdv,
+                'links' => [
+                    'self' => ['href' => $base],
+                    'praticien' => ['href' => '/praticiens/' . $rdv->praticienId],
+                    'patient' => ['href' => '/patients/' . $rdv->patientId],
+                    'annuler' => ['href' => $base . '/annuler'],
+                    'honorer' => ['href' => $base . '/honorer'],
+                    'ignorer' => ['href' => $base . '/ignorer'],
+                ],
+            ], 200);
         } catch (RendezVousNotFoundException $e) {
             return $this->json(['erreur' => $e->getMessage()], 404);
         } catch (PDOException) {

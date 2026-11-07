@@ -66,7 +66,9 @@ final class ActionsConsultationTest extends TestCase
         $response = (new ObtenirRendezVousAction($service))($request, new Response(), ['id' => 'rdv-1']);
 
         self::assertSame(200, $response->getStatusCode());
-        self::assertSame('rdv-1', json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR)['id']);
+        $body = json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        self::assertSame('rdv-1', $body['rendez_vous']['id']);
+        self::assertSame('/rdvs/rdv-1', $body['links']['self']['href']);
     }
 
     public function testRetourne404PourUnRendezVousAbsent(): void
