@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace toubilib\application\ports\api;
 
+use DateTimeImmutable;
 use toubilib\application\dto\CreateRdvDTO;
 use toubilib\application\dto\RendezVousDTO;
 
@@ -14,4 +15,7 @@ interface ServiceRendezVousInterface
     public function obtenirParId(string $id): RendezVousDTO;
 
     public function annuler(string $id): RendezVousDTO;
+
+    /** @return list<RendezVousDTO> */
+    public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array;
 }

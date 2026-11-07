@@ -23,6 +23,8 @@ final class AnnulerRendezVousActionTest extends TestCase
             {
             }
 
+            public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array { return []; }
+
             public function annuler(string $id): RendezVousDTO
             {
                 return ($this->annuler)($id);

@@ -117,6 +117,7 @@ final class ServicesConsultationTest extends TestCase
         $repository = new class($rendezVous) implements RendezVousRepositoryInterface {
             public function __construct(private readonly RendezVous $rendezVous) {}
             public function findById(string $id): ?RendezVous { return $this->rendezVous; }
+            public function findByPraticienEtPeriode(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array { return []; }
             public function save(RendezVous $rendezVous): void {}
         };
 
@@ -129,6 +130,7 @@ final class ServicesConsultationTest extends TestCase
     {
         $repository = new class implements RendezVousRepositoryInterface {
             public function findById(string $id): ?RendezVous { return null; }
+            public function findByPraticienEtPeriode(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array { return []; }
             public function save(RendezVous $rendezVous): void {}
         };
 

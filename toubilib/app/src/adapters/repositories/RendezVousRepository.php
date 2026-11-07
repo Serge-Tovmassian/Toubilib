@@ -27,10 +27,30 @@ final class RendezVousRepository implements RendezVousRepositoryInterface
         $statement->execute(['id' => $id]);
         $row = $statement->fetch(PDO::FETCH_ASSOC);
 
-        if ($row === false) {
-            return null;
-        }
+        return $row === false ? null : $this->hydrate($row);
+    }
 
+    public function findByPraticienEtPeriode(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array
+    {
+        $statement = $this->pdo->prepare(
+            'SELECT id, praticien_id, patient_id, date_heure_debut, duree, '
+            . 'date_heure_fin, date_creation, motif_visite, status FROM rdv '
+            . 'WHERE praticien_id = :praticien AND status <> :annule '
+            . 'AND date_heure_debut >= :debut AND date_heure_debut < :fin ORDER BY date_heure_debut',
+        );
+        $statement->execute([
+            'praticien' => $praticienId,
+            'annule' => EtatRendezVous::ANNULE->value,
+            'debut' => $debut->format('Y-m-d H:i:s'),
+            'fin' => $fin->format('Y-m-d H:i:s'),
+        ]);
+
+        return array_map($this->hydrate(...), $statement->fetchAll(PDO::FETCH_ASSOC));
+    }
+
+    /** @param array<string, mixed> $row */
+    private function hydrate(array $row): RendezVous
+    {
         return new RendezVous(
             id: $row['id'],
             praticienId: $row['praticien_id'],

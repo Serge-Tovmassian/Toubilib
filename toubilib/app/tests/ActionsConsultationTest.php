@@ -55,6 +55,7 @@ final class ActionsConsultationTest extends TestCase
     {
         $service = new class implements ServiceRendezVousInterface {
             public function creer(CreateRdvDTO $dto): CreateRdvDTO { return $dto; }
+            public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array { return []; }
             public function obtenirParId(string $id): RendezVousDTO
             {
                 return new RendezVousDTO($id, 'p1', 'patient-1', '2030-01-01T10:00:00+01:00', null, 30, 'PLANIFIE', null);
@@ -75,6 +76,7 @@ final class ActionsConsultationTest extends TestCase
     {
         $service = new class implements ServiceRendezVousInterface {
             public function creer(CreateRdvDTO $dto): CreateRdvDTO { return $dto; }
+            public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array { return []; }
             public function obtenirParId(string $id): RendezVousDTO { throw new RendezVousNotFoundException($id); }
             public function annuler(string $id): RendezVousDTO { throw new LogicException(); }
         };

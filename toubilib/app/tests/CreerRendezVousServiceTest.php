@@ -60,6 +60,7 @@ final class CreerRendezVousServiceTest extends TestCase
         };
         $rendezVous = new class implements RendezVousRepositoryInterface {
             public function findById(string $id): ?RendezVous { return null; }
+            public function findByPraticienEtPeriode(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array { return []; }
             public function save(RendezVous $rendezVous): void {}
         };
 
