@@ -35,9 +35,9 @@ final class AnnulerRendezVousActionTest extends TestCase
                 return ($this->annuler)($id);
             }
 
-            public function creer(CreateRdvDTO $dto): CreateRdvDTO
+            public function creer(CreateRdvDTO $dto): RendezVousDTO
             {
-                return $dto;
+                throw new LogicException();
             }
         };
 

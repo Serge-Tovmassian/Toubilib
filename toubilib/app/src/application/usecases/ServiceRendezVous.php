@@ -20,11 +20,12 @@ final class ServiceRendezVous implements ServiceRendezVousInterface
     ) {
     }
 
-    public function creer(CreateRdvDTO $dto): CreateRdvDTO
+    public function creer(CreateRdvDTO $dto): RendezVousDTO
     {
-        $this->createValidator->validate($dto);
+        $rendezVous = $this->createValidator->validate($dto);
+        $this->repository->insert($rendezVous);
 
-        return $dto;
+        return RendezVousDTO::fromEntity($rendezVous);
     }
 
     public function annuler(string $id): RendezVousDTO

@@ -61,6 +61,8 @@ final class CreerRendezVousServiceTest extends TestCase
         $rendezVous = new class implements RendezVousRepositoryInterface {
             public function findById(string $id): ?RendezVous { return null; }
             public function findByPraticienEtPeriode(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array { return []; }
+            public array $inseres = [];
+            public function insert(RendezVous $rendezVous): void { $this->inseres[] = $rendezVous; }
             public function save(RendezVous $rendezVous): void {}
         };
 
@@ -75,7 +77,10 @@ final class CreerRendezVousServiceTest extends TestCase
         $dto = $this->dto();
         $service = $this->service($this->praticien(), new Patient('patient-1', 'Martin', 'Bob'));
 
-        self::assertSame($dto, $service->creer($dto));
+        $rdv = $service->creer($dto);
+
+        self::assertSame('praticien-1', $rdv->praticienId);
+        self::assertSame('PLANIFIE', $rdv->etat);
     }
 
     public function testRefuseUnPraticienInexistant(): void

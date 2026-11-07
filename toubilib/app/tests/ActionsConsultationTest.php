@@ -54,7 +54,7 @@ final class ActionsConsultationTest extends TestCase
     public function testRetourneLeRendezVousEnJson(): void
     {
         $service = new class implements ServiceRendezVousInterface {
-            public function creer(CreateRdvDTO $dto): CreateRdvDTO { return $dto; }
+            public function creer(CreateRdvDTO $dto): RendezVousDTO { throw new LogicException(); }
             public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array { return []; }
             public function obtenirParId(string $id): RendezVousDTO
             {
@@ -75,7 +75,7 @@ final class ActionsConsultationTest extends TestCase
     public function testRetourne404PourUnRendezVousAbsent(): void
     {
         $service = new class implements ServiceRendezVousInterface {
-            public function creer(CreateRdvDTO $dto): CreateRdvDTO { return $dto; }
+            public function creer(CreateRdvDTO $dto): RendezVousDTO { throw new LogicException(); }
             public function agenda(string $praticienId, DateTimeImmutable $debut, DateTimeImmutable $fin): array { return []; }
             public function obtenirParId(string $id): RendezVousDTO { throw new RendezVousNotFoundException($id); }
             public function annuler(string $id): RendezVousDTO { throw new LogicException(); }

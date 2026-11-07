@@ -10,7 +10,7 @@ use toubilib\application\dto\RendezVousDTO;
 
 interface ServiceRendezVousInterface
 {
-    public function creer(CreateRdvDTO $dto): CreateRdvDTO;
+    public function creer(CreateRdvDTO $dto): RendezVousDTO;
 
     public function obtenirParId(string $id): RendezVousDTO;
 
