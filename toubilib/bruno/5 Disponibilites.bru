@@ -1,0 +1,16 @@
+meta {
+  name: 5 Disponibilites
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/praticiens/{{praticienId}}/disponibilites?date=2030-01-07&motif=CI
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+

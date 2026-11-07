@@ -1,0 +1,16 @@
+meta {
+  name: 7 Historique patient
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/patients/{{patientId}}/rdvs
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+

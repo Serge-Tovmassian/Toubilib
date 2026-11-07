@@ -1,0 +1,16 @@
+meta {
+  name: 3 Lister praticiens
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/praticiens?ville=Nancy
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+

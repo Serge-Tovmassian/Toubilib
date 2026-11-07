@@ -1,0 +1,19 @@
+meta {
+  name: 10 Indisponibilite
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/praticiens/{{praticienId}}/indisponibilites
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {"date": "2030-01-08", "periode": "matin"}
+}

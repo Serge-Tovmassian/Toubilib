@@ -1,0 +1,16 @@
+meta {
+  name: 4 Detail praticien
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/praticiens/{{praticienId}}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+

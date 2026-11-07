@@ -1,0 +1,16 @@
+meta {
+  name: 9 Creneaux occupes
+  type: http
+  seq: 9
+}
+
+get {
+  url: {{baseUrl}}/praticiens/{{praticienId}}/creneaux?debut=2030-01-07T00:00:00%2B00:00&fin=2030-01-08T00:00:00%2B00:00
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+

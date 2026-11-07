@@ -7,7 +7,7 @@ PHP 8.5, Slim 4, PHP-DI, PostgreSQL, architecture hexagonale. Back-end uniquemen
 
 ```
 cd toubilib
-cp toubilib.env.dist toubilib.env     # renseigner POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD
+cp toubilib.env.dist toubilib.env     # les valeurs par défaut suffisent pour une démo locale
 docker compose up -d --build
 ```
 
@@ -28,6 +28,16 @@ docker compose exec api.toubilib php bin/seed-users.php
 ```
 
 `POST /auth/login` avec `{"email","password"}` renvoie un JWT valable 1 h (`Authorization: Bearer …`).
+
+Une collection Bruno prête à l'emploi est dans `toubilib/bruno` (environnement `local`) : lancer « Login patient » avant les requêtes 3 à 7, « Login praticien » avant les requêtes 8 à 10 ; le jeton est conservé automatiquement.
+
+Test rapide (compte patient de démo, mot de passe `toubilib`) :
+
+```
+curl -s -X POST http://localhost:7080/auth/login -H "Content-Type: application/json" \
+  -d '{"email":"Denis.Teixeira@hotmail.fr","password":"toubilib"}'
+curl -s http://localhost:7080/praticiens -H "Authorization: Bearer <access_token>"
+```
 
 Tests : `cd toubilib/app && php vendor/bin/phpunit tests`
 
