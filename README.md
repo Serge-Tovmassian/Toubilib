@@ -13,9 +13,6 @@ docker compose up -d --build
 
 - API : http://localhost:7080
 - Adminer : http://localhost:8880 (serveur `toubilib.db`)
-- PostgreSQL : port 5532
-
-`CORS_ORIGINS` liste (séparée par des virgules) les origines navigateur autorisées ; sans correspondance, aucun en-tête CORS n'est envoyé.
 
 La base est créée et peuplée automatiquement (`app/sql/toubilib.schema.sql` puis `toubilib.data.sql`) au premier démarrage du conteneur PostgreSQL.
 Pour repartir de zéro : `docker compose down -v && docker compose up -d`.
@@ -32,18 +29,6 @@ docker compose exec api.toubilib php bin/seed-users.php
 Une collection Bruno prête à l'emploi est dans `toubilib/bruno` (environnement `local`) : lancer « Login patient » avant les requêtes 3 à 7, « Login praticien » avant les requêtes 8 à 10 ; le jeton est conservé automatiquement.
 
 Tests : `cd toubilib/app && php vendor/bin/phpunit tests`
-
-## Architecture
-
-```
-app/src/
-  domain/         entités et règles métier (Praticien, RendezVous, exceptions)
-  application/    ports api (services), ports spi (repositories), use cases, DTO, validateurs
-  adapters/       actions Slim (HTTP) et repositories PDO
-app/config/       routes, définitions PHP-DI, bootstrap (CORS, erreurs)
-```
-
-Les réponses JSON suivent un format HATEOAS : `{"type": "ressource|collection", ..., "links": {...}}`.
 
 ## Routes
 
@@ -99,4 +84,4 @@ Codes d'erreur : 400 requête invalide, 404 ressource inconnue, 409 créneau ind
 
 | Membre | Réalisations |
 |---|---|
-| Serge Tovmassian (projet réalisé seul) | Ensemble des 12 fonctionnalités : architecture hexagonale, routes et HATEOAS, CORS, création / annulation / honorer / ignorer, recherche, historique, disponibilités, indisponibilités, tests, Docker, README |
+| Serge Tovmassian (projet réalisé seul) | Ensemble du projet (12 fonctionnalités, authentification, tests, Docker) |
